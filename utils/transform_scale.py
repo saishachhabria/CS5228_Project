@@ -4,8 +4,8 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
 from pathlib import Path
 
-CATEGORICAL_COLUMNS = ["town", "flat_type", "flat_model", "subzone", "planning_area", "region", "pri_sch", "sec_sch"]
-DROP_COLUMNS = ["block", "street_name", "eco_category", "mrt_name", "latitude", "longitude"]
+CATEGORICAL_COLUMNS = ["flat_type", "region"]
+DROP_COLUMNS = ["block", "street_name", "eco_category", "mrt_name", "latitude", "longitude", "pri_sch", "sec_sch", "flat_model", "subzone", "planning_area", "town", "distance_to_IEBP", "distance_to_BN"]
 TARGET_VARIABLE_COLUMN = "resale_price"
 
 
