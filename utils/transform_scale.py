@@ -50,3 +50,38 @@ def transform_scale_df(X_train, X_test):
     X_test["lease_commence_date"] = X_test["lease_commence_date"] * 12
 
     return X_train, X_test
+
+
+def transform_v2_scale_df(X_train):
+    """
+    We still need to transform various columns (e.g. string -> categorical)
+    and scale the numerical columns.
+    """
+    # Drop columns
+    DROP_COLUMNS = ["block", "town", "street_name", "eco_category", "latitude", "longitude", \
+                    "subzone", "planning_area", "std_age_f", "std_age_m", "pri_sch", "sec_sch", "mrt_name"]
+    X_train = X_train.drop(columns=DROP_COLUMNS)
+
+    # Convert categorical data to numerical
+    CATEGORICAL_COLUMNS = ["flat_type", "flat_model", "region"]
+    for col in CATEGORICAL_COLUMNS:
+        X_train[col] = X_train[col].astype('category')
+
+    cat_columns = X_train.select_dtypes(['category']).columns
+    X_train[cat_columns] = X_train[cat_columns].apply(lambda x: x.cat.codes)
+
+    # # Transform datetime columns
+    # # We only want the year and month. Encode this as a single integer
+    # # as a year-month ordinal
+    X_train["month"] = X_train["month"].dt.year * 12 + X_train["month"].dt.month - 1
+    X_train["lease_commence_date"] = X_train["lease_commence_date"] * 12
+    
+    # # Scale numerical columns
+    scaler = StandardScaler()
+    num_df_train = X_train.select_dtypes(include=np.number)
+    scaled_num_df_train = pd.DataFrame(scaler.fit_transform(num_df_train), columns=num_df_train.columns, index=num_df_train.index)
+
+    X_train = X_train.drop(columns=num_df_train.columns)
+    X_train = pd.concat([X_train, scaled_num_df_train], axis=1)
+
+    return X_train
