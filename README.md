@@ -17,3 +17,7 @@ $ conda env update --name cs5228 -f environment.yml --prune
 # Initialisation
 
 Run notebook `initialisation.ipynb` first to download the relevant datasets and clean them.
+
+# Augmentation
+
+Run notebook `augmentation.ipynb` next to augment the cleaned dataset with supplementary data.
